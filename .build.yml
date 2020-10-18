@@ -11,6 +11,7 @@ secrets:
   - 4e983fc2-9d24-43eb-9986-1c18feb2e7b8
 tasks:
   - test: |
+      cd $PROJECT_DIR
       for file in **/*.fcc
       do
         echo "Compiling $file"
