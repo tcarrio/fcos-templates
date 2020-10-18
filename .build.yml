@@ -1,0 +1,20 @@
+image: archlinux
+packages:
+  - fcct
+sources:
+  - https://git.sr.ht/~tcarrio/fcos-templates
+  - https://git.sr.ht/~tcarrio/git-mirror
+environment:
+  PROJECT_DIR: fcos-templates
+  GIT_TARGET_REPO: git@github.com:tcarrio/fcos-templates.git
+secrets:
+  - 4e983fc2-9d24-43eb-9986-1c18feb2e7b8
+tasks:
+  - test: |
+      for file in **/*.fcc
+      do
+        echo "Compiling $file"
+        fcct $file 1>/dev/null || ( echo "Errors found in $file!" && exit 1 )
+        echo
+      done
+  - mirror-all: git-mirror/git-mirror.sh $PROJECT_DIR
