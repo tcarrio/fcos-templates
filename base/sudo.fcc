@@ -3,7 +3,7 @@ version: 1.0.0
 passwd:
   users:
     - name: core
-      password_hash: "$6$rounds=656000$snqbxprkpbmcsjty$i47NNiKtLCs29kIIIZ2.FKiTwbxlfaNvZ73UzBzPP4dR2Z.UrWmd.4KY9jhKV5/pFvLmrIgvQYl08hDM2.5Jw/"
+      password_hash: "$6$OJbfhyA2$0U4KzaADNKZtYTOwg.Cd83EvZdJ16NR4J8YP2PCZjqGEiwy2AaY5CObyvlsEk9gCotp9YQUyjDAQkxljfJx2Q0"
       ssh_authorized_keys:
         - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwWh/r0uIecKBu8B7ZaoKPZbfimAarWI2WYMsIIeOumJUyXNk8nEUzLRUvpak60QNWy1m7sTyEUhQZDoKT0q0oZzG+yNKBWgA4Q+A2ISBtBW4uil/OTK3ZrIQKmTzUYFYChQfZkjj4j/bdpzdxlyaNC7bnxS4T3Lia0LBjMDlPaXPOKbliV2rTlm81wF6SN3a9SPNjLrpDv8SJFU4qEY5ZTv8LXHABWmRN4TZTRMO6Or6OrYl9o/uBtGlQGpwsbl2CCaAlrpub/oaYCm15uCKmMwbmqo+zsBmAcpwbg43zBDy4PL9AZUhyyaLlF5/5Ypb4JkRdplObLmwzp6P7uUGn5mEIsLJrU25M0Bc6iIOxu1WZzEfrBRJblTx8501//FVJwVHdl+oYWG/BdF06ELTvUhWnjuhUu2wCaSfeeZxBegBJKz7lfjtCCvSPM64H6J/jqVPbJJuOUu4n0nv7Wizyn2JudlfyUqZ/D1B5z2KExScLrRH5IFebLTLRA6/HTpjltjb5bc+T+CB/rvXWVrfMRogVRixpcgzKwlFjgj5WcP+jBxDiU6te+5KuJrHZc+3m5HXkC4lFDYX42fSSnae40a11YAYu5OKBcOszVok1TFZD5Lhw5k0XrAUN28mRUzbUKbxfxHI+X5OU7ekSfcqNNy6yY5wvy9ZpLI1p6NloGw== tom@carrio.dev"
       groups: [sudo, docker]

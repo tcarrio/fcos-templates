@@ -4,7 +4,7 @@ passwd:
   users:
     - name: core
       ssh_authorized_keys:
-        - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCwWh/r0uIecKBu8B7ZaoKPZbfimAarWI2WYMsIIeOumJUyXNk8nEUzLRUvpak60QNWy1m7sTyEUhQZDoKT0q0oZzG+yNKBWgA4Q+A2ISBtBW4uil/OTK3ZrIQKmTzUYFYChQfZkjj4j/bdpzdxlyaNC7bnxS4T3Lia0LBjMDlPaXPOKbliV2rTlm81wF6SN3a9SPNjLrpDv8SJFU4qEY5ZTv8LXHABWmRN4TZTRMO6Or6OrYl9o/uBtGlQGpwsbl2CCaAlrpub/oaYCm15uCKmMwbmqo+zsBmAcpwbg43zBDy4PL9AZUhyyaLlF5/5Ypb4JkRdplObLmwzp6P7uUGn5mEIsLJrU25M0Bc6iIOxu1WZzEfrBRJblTx8501//FVJwVHdl+oYWG/BdF06ELTvUhWnjuhUu2wCaSfeeZxBegBJKz7lfjtCCvSPM64H6J/jqVPbJJuOUu4n0nv7Wizyn2JudlfyUqZ/D1B5z2KExScLrRH5IFebLTLRA6/HTpjltjb5bc+T+CB/rvXWVrfMRogVRixpcgzKwlFjgj5WcP+jBxDiU6te+5KuJrHZc+3m5HXkC4lFDYX42fSSnae40a11YAYu5OKBcOszVok1TFZD5Lhw5k0XrAUN28mRUzbUKbxfxHI+X5OU7ekSfcqNNy6yY5wvy9ZpLI1p6NloGw== tom@carrio.dev"
+        - "$6$OJbfhyA2$0U4KzaADNKZtYTOwg.Cd83EvZdJ16NR4J8YP2PCZjqGEiwy2AaY5CObyvlsEk9gCotp9YQUyjDAQkxljfJx2Q0"
       groups: [sudo, docker]
 
 systemd:
@@ -74,7 +74,26 @@ storage:
     - path: /etc/hostname
       overwrite: true
       contents:
-        inline: network0.int.carrio.dev
+        inline: mgmt0.int.carrio.dev
+    - path: /etc/NetworkManager/system-connections/enp2s0.nmconnection
+      mode: 0600
+      overwrite: true
+      contents:
+        inline: |
+          [connection]
+          type=ethernet
+          id='NUC Ethernet'
+          interface-name=enp2s0
+
+          [ethernet]
+          mac-address=f4:4d:30:62:4c:26
+
+          [ipv4]
+          method=manual
+          addresses=192.168.1.200/24
+          gateway=192.168.1.1
+          dns=192.168.1.200;192.168.1.201;1.1.1.1
+          dns-search=int.carrio.dev
     - path: /tmp/tftp-config
       overwrite: true
       contents:
@@ -83,8 +102,8 @@ storage:
       overwrite: true
       contents:
         inline: |
-          option domain-name "example.org";
-          option domain-name-servers ns1.example.org, ns2.example.org;
+          option domain-name "int.carrio.dev";
+          option domain-name-servers mgmt0.int.carrio.dev, mgmt0.int.carrio.dev;
 
           default-lease-time 60;
           max-lease-time 600;
@@ -109,13 +128,13 @@ storage:
 
           ### SHARED CONFIGURATION (duplicate across any DHCP servers)
           # Defines the printer so vic doesn't hate me
-          host hp_printer {
+          host prnt00.int.carrio.dev {
             hardware ethernet f4:30:b9:ea:4c:0f;
             fixed-address 192.168.1.56;
           }
 
           # Smart switch for server board
-          host tp_link_switch {
+          host tpl_vlan_switch0.int.carrio.dev {
             hardware ethernet d8:07:b6:4f:ac:b5;
             fixed-address 192.168.1.210;
           }
@@ -123,58 +142,58 @@ storage:
           # Defines the host configurations for the nuc array
           class "nuc" {
             match if substring (option vendor-class-identifier, 0, 6) = "f44d30";
-            next-server 192.168.1.240;
-            filename "fcos-base.kpxe";
+            ### next-server 192.168.1.240;
+            ### filename "fcos-base.kpxe";
           }
 
           # management servers
-          host mgmt_nuc00 {
-            hardware ethernet f4:4d:30:61:9b:19;
-            fixed-address 192.168.1.200;
-            next-server 192.168.1.240;
-            filename "fcos-mgmt.kpxe";
-          }
-          host mgmt_nuc01 {
+          host mgmt0.int.carrio.dev {
             hardware ethernet f4:4d:30:62:4c:26;
-            fixed-address 192.168.1.201;
-            next-server 192.168.1.240;
-            filename "fcos-mgmt.kpxe";
+            fixed-address 192.168.1.200;
+            ### next-server 192.168.1.240;
+            ### filename "fcos-mgmt.kpxe";
           }
-          host mgmt_nuc02 {
+          host mgmt1.int.carrio.dev {
+            hardware ethernet f4:4d:30:61:9b:19;
+            fixed-address 192.168.1.201;
+            ### next-server 192.168.1.240;
+            ### filename "fcos-mgmt.kpxe";
+          }
+          host mgmt2.int.carrio.dev {
             hardware ethernet f4:4d:30:61:99:ab;
             fixed-address 192.168.1.202;
-            next-server 192.168.1.240;
-            filename "fcos-mgmt.kpxe";
+            ### next-server 192.168.1.240;
+            ### filename "fcos-mgmt.kpxe";
           }
-          host mgmt_nuc03 {
+          host mgmt3.int.carrio.dev {
             hardware ethernet f4:4d:30:61:8c:cf;
             fixed-address 192.168.1.203;
-            next-server 192.168.1.240;
-            filename "fcos-mgmt.kpxe";
+            ### next-server 192.168.1.240;
+            ### filename "fcos-mgmt.kpxe";
           }
 
           # computing servers
-          host srvr_nuc00 {
+          host ctrl00.int.carrio.dev {
             hardware ethernet f4:4d:30:61:99:ad;
             fixed-address 192.168.1.210;
           }
-          host srvr_nuc01 {
+          host ctrl01.int.carrio.dev {
             hardware ethernet f4:4d:30:61:8a:9d;
             fixed-address 192.168.1.211;
           }
-          host srvr_nuc02 {
+          host ctrl02.int.carrio.dev {
             hardware ethernet f4:4d:30:62:4a:76;
             fixed-address 192.168.1.212;
           }
-          host srvr_nuc03 {
+          host ctrl03.int.carrio.dev {
             hardware ethernet f4:4d:30:62:4a:43;
             fixed-address 192.168.1.213;
           }
-          host srvr_nuc04 {
+          host ctrl04.int.carrio.dev {
             hardware ethernet f4:4d:30:61:9a:e0;
             fixed-address 192.168.1.214;
           }
-          host srvr_nuc05 {
+          host ctrl05.int.carrio.dev {
             hardware ethernet f4:4d:30:61:99:ed;
             fixed-address 192.168.1.215;
           }

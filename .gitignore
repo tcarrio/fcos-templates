@@ -1,1 +1,4 @@
 config.ign
+*.iso
+*.iso.sig
+*.img
